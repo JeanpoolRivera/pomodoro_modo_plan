@@ -67,6 +67,7 @@ function tick() {
 
   if (state.timeRemaining <= 0) {
     pauseTimer();
+    handlePhaseComplete();
   }
 }
 
@@ -90,6 +91,20 @@ function nextPhase() {
   setMode(state.mode === 'work' ? 'shortBreak' : 'work');
   state.timeRemaining = getDurationForMode(state.mode);
   updateDisplay();
+}
+
+function handlePhaseComplete() {
+  if (state.mode === 'work') {
+    state.pomodorosCompleted++;
+    renderPomodoroCounter();
+  }
+
+  setMode(state.mode === 'work' ? 'shortBreak' : 'work');
+  state.timeRemaining = getDurationForMode(state.mode);
+  updateDisplay();
+  startTimer();
+  btnStart.textContent = 'Pausar';
+  btnStart.setAttribute('aria-pressed', 'true');
 }
 
 /* --- Eventos --- */
