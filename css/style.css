@@ -165,6 +165,15 @@ fieldset input[type="radio"]:checked + label {
   padding: 1rem 0;
 }
 
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.timer-alert {
+  animation: pulse 0.4s ease-in-out 3;
+}
+
 /* --- Contador de pomodoros (dots) --- */
 
 .pomodoro-counter {

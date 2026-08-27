@@ -24,6 +24,51 @@ const btnSkip = document.getElementById('btn-skip');
 const dots = document.querySelectorAll('.dot');
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 
+/* --- Web Audio API --- */
+
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playAlarm() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+
+  const BEeps = [0, 0.2, 0.4];
+  const DURATION = 0.12;
+  const FREQUENCY = 880;
+
+  BEeps.forEach(offset => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = FREQUENCY;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime + offset);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + offset + DURATION);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + offset);
+    osc.stop(ctx.currentTime + offset + DURATION);
+  });
+}
+
+/* --- Notificación visual --- */
+
+function notifyPhaseComplete(nextModeName) {
+  document.title = `${nextModeName} — Pomodoro Timer`;
+  timerDisplay.classList.add('timer-alert');
+  setTimeout(() => {
+    timerDisplay.classList.remove('timer-alert');
+  }, 1500);
+}
+
 /* --- Utilidades --- */
 
 function formatTime(seconds) {
@@ -80,9 +125,11 @@ function applyModeStyles() {
 function setMode(mode) {
   state.mode = mode;
   const checkedValue = mode === 'work' ? 'work' : 'shortBreak';
+  const modeName = mode === 'work' ? 'Work' : 'Short Break';
   modeRadios.forEach(radio => {
     radio.checked = radio.value === checkedValue;
   });
+  document.title = `${modeName} — Pomodoro Timer`;
   applyModeStyles();
 }
 
@@ -99,7 +146,13 @@ function handlePhaseComplete() {
     renderPomodoroCounter();
   }
 
-  setMode(state.mode === 'work' ? 'shortBreak' : 'work');
+  const nextMode = state.mode === 'work' ? 'shortBreak' : 'work';
+  const nextModeName = nextMode === 'work' ? 'Work' : 'Short Break';
+
+  playAlarm();
+  notifyPhaseComplete(nextModeName);
+
+  setMode(nextMode);
   state.timeRemaining = getDurationForMode(state.mode);
   updateDisplay();
   startTimer();
