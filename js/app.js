@@ -35,17 +35,17 @@ function getAudioContext() {
   return audioCtx;
 }
 
-function playAlarm() {
+async function playAlarm() {
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
-    ctx.resume();
+    await ctx.resume();
   }
 
-  const BEeps = [0, 0.2, 0.4];
+  const beeps = [0, 0.2, 0.4];
   const DURATION = 0.12;
   const FREQUENCY = 880;
 
-  BEeps.forEach(offset => {
+  beeps.forEach(offset => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
@@ -63,10 +63,12 @@ function playAlarm() {
 
 function notifyPhaseComplete(nextModeName) {
   document.title = `${nextModeName} — Pomodoro Timer`;
-  timerDisplay.classList.add('timer-alert');
   setTimeout(() => {
-    timerDisplay.classList.remove('timer-alert');
-  }, 1500);
+    timerDisplay.classList.add('timer-alert');
+    setTimeout(() => {
+      timerDisplay.classList.remove('timer-alert');
+    }, 1500);
+  }, 200);
 }
 
 /* --- Utilidades --- */
@@ -149,12 +151,13 @@ function handlePhaseComplete() {
   const nextMode = state.mode === 'work' ? 'shortBreak' : 'work';
   const nextModeName = nextMode === 'work' ? 'Work' : 'Short Break';
 
-  playAlarm();
-  notifyPhaseComplete(nextModeName);
-
   setMode(nextMode);
   state.timeRemaining = getDurationForMode(state.mode);
   updateDisplay();
+
+  playAlarm();
+  notifyPhaseComplete(nextModeName);
+
   startTimer();
   btnStart.textContent = 'Pausar';
   btnStart.setAttribute('aria-pressed', 'true');
