@@ -83,17 +83,6 @@ main {
   padding: 0 1rem;
 }
 
-/* --- Timer display --- */
-
-[role="timer"] {
-  font-family: var(--font-mono);
-  font-size: clamp(3rem, 10vw, 8rem);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  user-select: none;
-}
-
 /* --- Footer --- */
 
 footer {
@@ -104,4 +93,130 @@ footer {
 footer p {
   font-size: 0.8rem;
   color: var(--color-text-muted);
+}
+
+/* ========================================
+   Etapa 3 — Componentes visuales
+   ======================================== */
+
+/* --- Selector de modos (fieldset) --- */
+
+fieldset {
+  border: none;
+  display: flex;
+  gap: 0.5rem;
+  background-color: var(--color-surface);
+  padding: 0.35rem;
+  border-radius: 9999px;
+}
+
+legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+fieldset input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+fieldset label {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+fieldset label:hover {
+  color: var(--color-text);
+}
+
+fieldset input[type="radio"]:checked + label {
+  background-color: var(--color-btn);
+  color: var(--color-text);
+}
+
+/* --- Display del temporizador --- */
+
+[role="timer"] {
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  user-select: none;
+  padding: 1rem 0;
+}
+
+/* --- Contador de pomodoros (dots) --- */
+
+.pomodoro-counter {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.dot.filled {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+}
+
+/* --- Botones --- */
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+button {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: var(--color-btn);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform var(--transition-transform);
+}
+
+button:hover {
+  background-color: var(--color-btn-hover);
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* --- Accesibilidad: focus visible --- */
+
+button:focus-visible,
+fieldset input[type="radio"]:focus-visible + label {
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
 }
