@@ -1,0 +1,107 @@
+/* ========================================
+   Etapa 2 — Reset, variables y layout base
+   ======================================== */
+
+/* --- CSS Reset --- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Variables CSS --- */
+
+:root {
+  /* Colores primarios */
+  --color-work: #e74c3c;
+  --color-short-break: #27ae60;
+
+  /* Colores neutros */
+  --color-bg: #1a1a2e;
+  --color-surface: #16213e;
+  --color-text: #ecf0f1;
+  --color-text-muted: #95a5a6;
+
+  /* Botones */
+  --color-btn: #0f3460;
+  --color-btn-hover: #1a508b;
+
+  /* Tipografía */
+  --font-family: 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+
+  /* Transiciones */
+  --transition-color: background-color 0.5s ease;
+  --transition-transform: transform 0.2s ease;
+}
+
+/* --- Layout base --- */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-work);
+  transition: var(--transition-color);
+}
+
+/* --- Header --- */
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* --- Main --- */
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  padding: 0 1rem;
+}
+
+/* --- Timer display --- */
+
+[role="timer"] {
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  user-select: none;
+}
+
+/* --- Footer --- */
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+footer p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
