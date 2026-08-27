@@ -22,6 +22,7 @@ const btnStart = document.getElementById('btn-start');
 const btnReset = document.getElementById('btn-reset');
 const btnSkip = document.getElementById('btn-skip');
 const dots = document.querySelectorAll('.dot');
+const modeRadios = document.querySelectorAll('input[name="mode"]');
 
 /* --- Utilidades --- */
 
@@ -69,6 +70,61 @@ function tick() {
   }
 }
 
+/* --- Cambio de modo --- */
+
+function applyModeStyles() {
+  document.body.classList.toggle('short-break', state.mode === 'shortBreak');
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  const checkedValue = mode === 'work' ? 'work' : 'shortBreak';
+  modeRadios.forEach(radio => {
+    radio.checked = radio.value === checkedValue;
+  });
+  applyModeStyles();
+}
+
+function nextPhase() {
+  pauseTimer();
+  setMode(state.mode === 'work' ? 'shortBreak' : 'work');
+  state.timeRemaining = getDurationForMode(state.mode);
+  updateDisplay();
+}
+
+/* --- Eventos --- */
+
+function handleStartPause() {
+  if (state.isRunning) {
+    pauseTimer();
+    btnStart.textContent = 'Iniciar';
+    btnStart.setAttribute('aria-pressed', 'false');
+  } else {
+    startTimer();
+    btnStart.textContent = 'Pausar';
+    btnStart.setAttribute('aria-pressed', 'true');
+  }
+}
+
+function handleReset() {
+  resetTimer();
+  btnStart.textContent = 'Iniciar';
+  btnStart.setAttribute('aria-pressed', 'false');
+}
+
+function handleSkip() {
+  nextPhase();
+  btnStart.textContent = 'Iniciar';
+  btnStart.setAttribute('aria-pressed', 'false');
+}
+
+function handleModeChange(e) {
+  setMode(e.target.value);
+  resetTimer();
+  btnStart.textContent = 'Iniciar';
+  btnStart.setAttribute('aria-pressed', 'false');
+}
+
 /* --- Inicialización --- */
 
 function init() {
@@ -77,8 +133,16 @@ function init() {
   state.pomodorosCompleted = 0;
   state.intervalId = null;
 
+  applyModeStyles();
   updateDisplay();
   renderPomodoroCounter();
+
+  btnStart.addEventListener('click', handleStartPause);
+  btnReset.addEventListener('click', handleReset);
+  btnSkip.addEventListener('click', handleSkip);
+  modeRadios.forEach(radio => {
+    radio.addEventListener('change', handleModeChange);
+  });
 }
 
 function renderPomodoroCounter() {
