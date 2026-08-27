@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro Timer</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Pomodoro Timer</h1>
+  </header>
+
+  <main>
+    <fieldset>
+      <legend>Modo</legend>
+      <input type="radio" name="mode" id="mode-work" value="work" checked>
+      <label for="mode-work">Work</label>
+
+      <input type="radio" name="mode" id="mode-short-break" value="shortBreak">
+      <label for="mode-short-break">Short Break</label>
+    </fieldset>
+
+    <div role="timer" aria-live="polite" aria-label="Tiempo restante">
+      25:00
+    </div>
+
+    <div class="pomodoro-counter" aria-label="Pomodoros completados">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+
+    <div class="controls">
+      <button id="btn-start" aria-pressed="false">Iniciar</button>
+      <button id="btn-reset">Reiniciar</button>
+      <button id="btn-skip">Saltar</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>Pomodoro Timer &copy; 2026</p>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
