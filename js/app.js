@@ -31,15 +31,48 @@ function formatTime(seconds) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
+function getDurationForMode(mode) {
+  return mode === 'work' ? CONFIG.workDuration : CONFIG.shortBreakDuration;
+}
+
 function updateDisplay() {
   timerDisplay.textContent = formatTime(state.timeRemaining);
+}
+
+/* --- Lógica del temporizador --- */
+
+function startTimer() {
+  if (state.isRunning) return;
+  state.isRunning = true;
+  state.intervalId = setInterval(tick, 1000);
+}
+
+function pauseTimer() {
+  if (!state.isRunning) return;
+  clearInterval(state.intervalId);
+  state.intervalId = null;
+  state.isRunning = false;
+}
+
+function resetTimer() {
+  pauseTimer();
+  state.timeRemaining = getDurationForMode(state.mode);
+  updateDisplay();
+}
+
+function tick() {
+  state.timeRemaining--;
+  updateDisplay();
+
+  if (state.timeRemaining <= 0) {
+    pauseTimer();
+  }
 }
 
 /* --- Inicialización --- */
 
 function init() {
-  state.timeRemaining = CONFIG.workDuration;
-  state.mode = 'work';
+  state.timeRemaining = getDurationForMode(state.mode);
   state.isRunning = false;
   state.pomodorosCompleted = 0;
   state.intervalId = null;
